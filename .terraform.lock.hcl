@@ -23,7 +23,7 @@ provider "registry.opentofu.org/hashicorp/archive" {
   ]
 }
 
-provider "registry.opentofu.org/opentofu/aws" {
+provider "registry.opentofu.org/hashicorp/aws" {
   version     = "6.47.0"
   constraints = "6.47.0"
   hashes = [
