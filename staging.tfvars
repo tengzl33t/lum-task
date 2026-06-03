@@ -1,2 +1,2 @@
 environment = "staging"
-log_level = "debug"
+log_level   = "debug"
