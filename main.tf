@@ -4,6 +4,11 @@ module "api_gateway" {
   environment = var.environment
 }
 
+module "dynamodb" {
+  source = "./modules/dynamodb"
+  environment = var.environment
+}
+
 module "iam" {
   source = "./modules/iam"
   environment = var.environment
