@@ -62,12 +62,10 @@ jobs:
           aws-region: ${{ vars.PROD_AWS_REGION }}
           role-to-assume: ${{ vars.PROD_AWS_ROLE_ARN }}
           mask-aws-account-id: true
+          retry-max-attempts: 5
 
       - name: OT Plan
         run: tofu plan -no-color
-
-      - name: OT Plan
-        run: tofu deploy -no-color
 
       - name: OT Apply changes
         run: tofu apply -auto-approve -var-file="prod.tfvars"
