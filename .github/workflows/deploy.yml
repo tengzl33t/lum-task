@@ -54,14 +54,13 @@ jobs:
         uses: opentofu/setup-opentofu@v2
         with:
           cache: true
-          tofu_version: 1.11.5
-
-      - name: OT fmt
-        run: tofu fmt -check
-        continue-on-error: true
 
       - name: OT Init
         run: tofu init
+
+      - name: OT fmt
+        run: tofu fmt -check -recursive -diff
+        continue-on-error: true
 
       - name: OT Validate
         run: tofu validate -no-color
