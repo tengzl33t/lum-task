@@ -12,6 +12,7 @@ module "dynamodb" {
 module "iam" {
   source      = "./modules/iam"
   environment = var.environment
+  requests_db_arn = module.dynamodb.requests_db_arn
 }
 
 module "lambda" {
