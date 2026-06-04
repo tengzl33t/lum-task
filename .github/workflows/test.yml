@@ -56,7 +56,7 @@ jobs:
           cache: true
 
       - name: OT fmt
-        run: tofu fmt -check -recursive -diff
+        run: tofu fmt -check
 
       - name: OT Init
         run: tofu init

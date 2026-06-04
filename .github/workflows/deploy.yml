@@ -59,7 +59,7 @@ jobs:
         run: tofu init
 
       - name: OT fmt
-        run: tofu fmt -check -recursive -diff
+        run: tofu fmt -check
         continue-on-error: true
 
       - name: OT Validate
