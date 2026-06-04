@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Prepare
-        uses: "./.github/workflow_helpers/prepare.yml"
+        uses: "./.github/actions/prepare"
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
