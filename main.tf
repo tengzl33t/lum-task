@@ -22,3 +22,8 @@ module "lambda" {
   log_level                       = var.log_level
   healthcheck_apigw_exec_arn = module.api_gateway.healthcheck_apigw_exec_arn
 }
+
+module "cloudwatch" {
+  source                          = "./modules/cloudwatch"
+  healthcheck_lambda_function_name = module.lambda.healthcheck_lambda_function_name
+}
