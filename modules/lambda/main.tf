@@ -20,3 +20,12 @@ resource "aws_lambda_function" "healthcheck_lambda" {
     }
   }
 }
+
+resource "aws_lambda_permission" "apigw" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.healthcheck_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${var.healthcheck_apigw_exec_arn}/*/*"
+}
