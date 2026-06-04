@@ -72,7 +72,7 @@ jobs:
           retry-max-attempts: 5
 
       - name: OT Plan
-        run: tofu plan -no-color
+        run: tofu plan -no-color -var-file="staging.tfvars"
 
   results:
     name: Test results

@@ -73,7 +73,7 @@ jobs:
           retry-max-attempts: 5
 
       - name: OT Plan
-        run: tofu plan -no-color
+        run: tofu plan -no-color -var-file="prod.tfvars"
 
       - name: OT Apply changes
         run: tofu apply -auto-approve -var-file="prod.tfvars"
