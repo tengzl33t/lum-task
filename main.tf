@@ -20,4 +20,5 @@ module "lambda" {
   healthcheck_lambda_iam_role_arn = module.iam.healthcheck_lambda_iam_role_arn
   environment                     = var.environment
   log_level                       = var.log_level
+  healthcheck_apigw_exec_arn = module.api_gateway.healthcheck_apigw_exec_arn
 }
