@@ -17,11 +17,14 @@ runs:
         cache: true
 
     - name: OT Init
+      shell: bash
       run: tofu init
 
     - name: OT fmt
       run: tofu fmt -check
+      shell: bash
       continue-on-error: true
 
     - name: OT Validate
+      shell: bash
       run: tofu validate -no-color
