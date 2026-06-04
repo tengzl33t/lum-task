@@ -42,6 +42,14 @@ jobs:
       - name: Repo checkout
         uses: actions/checkout@v6
 
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+
       - name: Prepare OpenTofu
         uses: opentofu/setup-opentofu@v2
         with:
