@@ -10,8 +10,8 @@ module "dynamodb" {
 }
 
 module "iam" {
-  source      = "./modules/iam"
-  environment = var.environment
+  source          = "./modules/iam"
+  environment     = var.environment
   requests_db_arn = module.dynamodb.requests_db_arn
 }
 
@@ -20,10 +20,10 @@ module "lambda" {
   healthcheck_lambda_iam_role_arn = module.iam.healthcheck_lambda_iam_role_arn
   environment                     = var.environment
   log_level                       = var.log_level
-  healthcheck_apigw_exec_arn = module.api_gateway.healthcheck_apigw_exec_arn
+  healthcheck_apigw_exec_arn      = module.api_gateway.healthcheck_apigw_exec_arn
 }
 
 module "cloudwatch" {
-  source                          = "./modules/cloudwatch"
+  source                           = "./modules/cloudwatch"
   healthcheck_lambda_function_name = module.lambda.healthcheck_lambda_function_name
 }

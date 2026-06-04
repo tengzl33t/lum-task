@@ -1,9 +1,9 @@
 variable "environment" {
-  type = string
+  type    = string
   default = "staging"
 }
 
 variable "log_level" {
-  type = string
+  type    = string
   default = "info"
 }
