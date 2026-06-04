@@ -13,10 +13,23 @@ resource "aws_lambda_function" "healthcheck_lambda" {
   filename = data.archive_file.healthcheck_lambda_code_file.output_path
   source_code_hash = data.archive_file.healthcheck_lambda_code_file.output_base64sha256
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = {
       ENVIRONMENT = var.environment
       LOG_LEVEL   = var.log_level
     }
   }
+}
+
+resource "aws_lambda_permission" "apigw" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.healthcheck_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${var.healthcheck_apigw_exec_arn}/*/*"
 }

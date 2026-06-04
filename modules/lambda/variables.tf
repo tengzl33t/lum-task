@@ -9,3 +9,7 @@ variable "environment" {
 variable "log_level" {
   type = string
 }
+
+variable "healthcheck_apigw_exec_arn" {
+  type = string
+}
