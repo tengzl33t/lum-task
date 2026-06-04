@@ -1,4 +1,4 @@
-name: Test
+name: Validation
 
 on:
   pull_request:
@@ -14,55 +14,36 @@ permissions:
   id-token: write
 
 jobs:
-#  get-changed-files:
-#    name: Get changed files
-#    runs-on: ubuntu-latest
-#    outputs:
-#      matrix: ${{ steps.changed-files.outputs.all_modified_files }}
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v6
-#
-#      - name: Get changed files
-#        id: changed-files
-#        uses: tj-actions/changed-files@v47
-#        with:
-#          matrix: true
-#          files: |
-#            modules/**
-#            ./*.tf
-#            ./*.tfvars
+  get-changed-files:
+    name: Get changed files
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.changed-files.outputs.all_modified_files }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
 
-  test:
-    name: Test
-#    needs: get-changed-files
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v47
+        with:
+          matrix: true
+          files: |
+            modules/**
+            ./*.tf
+            ./*.tfvars
+
+  validate:
+    name: Validation
+    needs: get-changed-files
     runs-on: ubuntu-latest
     if: ${{ needs.get-changed-files.outputs.matrix != '[]' }}
     steps:
       - name: Repo checkout
         uses: actions/checkout@v6
 
-      - name: Run Trivy
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          scan-type: config
-          scan-ref: .
-          severity: HIGH,CRITICAL
-          exit-code: '1'
-
-      - name: Prepare OpenTofu
-        uses: opentofu/setup-opentofu@v2
-        with:
-          cache: true
-
-      - name: OT fmt
-        run: tofu fmt -check
-
-      - name: OT Init
-        run: tofu init
-
-      - name: OT Validate
-        run: tofu validate -no-color
+      - name: Prepare
+        uses: "./.github/workflow_helpers/prepare.yml"
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -75,13 +56,13 @@ jobs:
         run: tofu plan -no-color -var-file="staging.tfvars"
 
   results:
-    name: Test results
-    needs: test
+    name: Validation results
+    needs: validate
     runs-on: ubuntu-latest
     if: ${{ always() && !cancelled() }}
     steps:
       - run: |
-          result="${{ needs.test.result }}"
+          result="${{ needs.validate.result }}"
           if [[ $result == "success" || $result == "skipped" ]]; then
             exit 0
           else
