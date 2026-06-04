@@ -54,6 +54,7 @@ jobs:
         uses: opentofu/setup-opentofu@v2
         with:
           cache: true
+          tofu_version: 1.11.5
 
       - name: OT fmt
         run: tofu fmt -check
