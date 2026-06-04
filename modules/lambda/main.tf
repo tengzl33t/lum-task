@@ -13,6 +13,10 @@ resource "aws_lambda_function" "healthcheck_lambda" {
   filename = data.archive_file.healthcheck_lambda_code_file.output_path
   source_code_hash = data.archive_file.healthcheck_lambda_code_file.output_base64sha256
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = {
       ENVIRONMENT = var.environment
