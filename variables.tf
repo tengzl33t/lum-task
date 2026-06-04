@@ -1,6 +1,6 @@
 variable "environment" {
   type = string
-  default = "prod"
+  default = "staging"
 }
 
 variable "log_level" {

@@ -9,7 +9,7 @@ logger = logging.getLogger()
 logger.setLevel(os.getenv("LOG_LEVEL", "INFO"))
 
 dynamodb = boto3.resource("dynamodb")
-environment = os.getenv("ENVIRONMENT", "prod")
+environment = os.getenv("ENVIRONMENT", "staging")
 table = dynamodb.Table(f"{environment}-requests-db")
 
 def lambda_handler(event, context):
