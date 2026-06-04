@@ -7,8 +7,4 @@ terraform {
   }
 }
 
-provider "aws" {
-  assume_role {
-    role_arn = "arn:aws:iam::285051607148:role/tofu-deploy"
-  }
-}
+provider "aws" {}
