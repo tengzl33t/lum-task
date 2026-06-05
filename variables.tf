@@ -4,6 +4,6 @@ variable "environment" {
 }
 
 variable "log_level" {
-  type = string
+  type    = string
   default = "INFO"
 }
