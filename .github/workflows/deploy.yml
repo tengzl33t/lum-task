@@ -33,19 +33,54 @@ jobs:
             ./*.tf
             ./*.tfvars
 
-  deploy:
-    name: Deployment
+  plan:
+    name: Plan
     needs: get-changed-files
     runs-on: ubuntu-latest
     environment:
-      name: prod
+      name: prod-plan
     if: ${{ needs.get-changed-files.outputs.matrix != '[]' }}
     steps:
       - name: Repo checkout
         uses: actions/checkout@v6
 
-      - name: Prepare
-        uses: "./.github/actions/prepare"
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Validate Python files compilable
+        run: python -m compileall modules/lambda
+
+      - name: Install ruff
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+
+      - name: Run Ruff
+        run: ruff check --config ruff.toml --output-format=github
+
+      - name: Prepare OpenTofu
+        uses: opentofu/setup-opentofu@v2
+        with:
+          cache: true
+
+      - name: OT Init
+        run: tofu init
+
+      - name: OT fmt
+        run: tofu fmt -check
+
+      - name: OT Validate
+        run: tofu validate -no-color
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -56,6 +91,31 @@ jobs:
 
       - name: OT Plan
         run: tofu plan -no-color -var-file="prod.tfvars"
+
+  deploy:
+    name: Deployment
+    needs: plan
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+    steps:
+      - name: Repo checkout
+        uses: actions/checkout@v6
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          mask-aws-account-id: true
+          retry-max-attempts: 5
+
+      - name: Prepare OpenTofu
+        uses: opentofu/setup-opentofu@v2
+        with:
+          cache: true
+
+      - name: OT Init
+        run: tofu init
 
       - name: OT Apply changes
         run: tofu apply -auto-approve -var-file="prod.tfvars"

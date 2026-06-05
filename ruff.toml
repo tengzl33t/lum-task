@@ -1,0 +1,25 @@
+target-version = "py312"
+src = ["modules/lambda"]
+
+[lint]
+select = ["ALL"]
+ignore = [
+    "E501",
+    "PLR2004",
+    "D104",
+    "D100",
+    "D102",
+    "INP001",
+    "FBT",
+    "TD",
+    "PT",
+    "ERA001",
+    "ANN",
+    "D",
+    "G",
+    "T201",
+    "PERF203",
+    "BLE001",
+    "TRY301",
+    "S603"
+]
