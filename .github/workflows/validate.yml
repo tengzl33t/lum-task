@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
   id-token: write
 
 jobs:
@@ -42,8 +42,28 @@ jobs:
       - name: Repo checkout
         uses: actions/checkout@v6
 
-      - name: Prepare
-        uses: "./.github/actions/prepare"
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+
+      - name: Prepare OpenTofu
+        uses: opentofu/setup-opentofu@v2
+        with:
+          cache: true
+
+      - name: OT Init
+        run: tofu init
+
+      - name: OT fmt
+        run: tofu fmt -check
+        continue-on-error: true
+
+      - name: OT Validate
+        run: tofu validate -no-color
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
