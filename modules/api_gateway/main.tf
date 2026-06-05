@@ -7,6 +7,11 @@ resource "aws_apigatewayv2_stage" "healthcheck_apigw" {
   api_id      = aws_apigatewayv2_api.healthcheck_apigw.id
   name        = "$default"
   auto_deploy = true
+
+  default_route_settings {
+    throttling_rate_limit  = 5
+    throttling_burst_limit = 10
+  }
 }
 
 resource "aws_apigatewayv2_integration" "healthcheck_apigw" {
