@@ -1,0 +1,30 @@
+name: Preparation
+
+runs:
+  using: composite
+  steps:
+    - name: Run Trivy
+      uses: aquasecurity/trivy-action@v0.36.0
+      with:
+        scan-type: config
+        scan-ref: .
+        severity: HIGH,CRITICAL
+        exit-code: '1'
+
+    - name: Prepare OpenTofu
+      uses: opentofu/setup-opentofu@v2
+      with:
+        cache: true
+
+    - name: OT Init
+      shell: bash
+      run: tofu init
+
+    - name: OT fmt
+      run: tofu fmt -check
+      shell: bash
+      continue-on-error: true
+
+    - name: OT Validate
+      shell: bash
+      run: tofu validate -no-color
