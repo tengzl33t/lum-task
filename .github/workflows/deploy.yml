@@ -47,8 +47,8 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
-          aws-region: ${{ vars.PROD_AWS_REGION }}
-          role-to-assume: ${{ vars.PROD_AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           mask-aws-account-id: true
           retry-max-attempts: 5
 
