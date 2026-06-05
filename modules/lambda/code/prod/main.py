@@ -33,10 +33,21 @@ def lambda_handler(event, context):
         "path_params": event.get("pathParameters") or {},
     }
 
-    if method == "POST":
-        item["body"] = json.loads(event.get("body") or {})
+    body = json.loads(event.get("body") or {}) if method == "POST" else {}
+
+    if body:
+        item["body"] = body
 
     table.put_item(Item=item)
+
+    if  "payload" not in body:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({
+                "error": "Bad Request",
+                "message": "POST request body with 'payload' key is required."
+            })
+        }
 
     return {
         "statusCode": 200,
