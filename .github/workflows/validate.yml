@@ -74,7 +74,7 @@ jobs:
           cache: true
 
       - name: OT Init
-        run: tofu init
+        run: tofu init -backend-config="key=staging/terraform.tfstate"
 
       - name: OT fmt
         run: tofu fmt -check
