@@ -74,7 +74,7 @@ jobs:
           cache: true
 
       - name: OT Init
-        run: tofu init
+        run: tofu init -backend-config="key=prod/terraform.tfstate"
 
       - name: OT fmt
         run: tofu fmt -check
@@ -115,7 +115,7 @@ jobs:
           cache: true
 
       - name: OT Init
-        run: tofu init
+        run: tofu init -backend-config="key=prod/terraform.tfstate"
 
       - name: OT Apply changes
         run: tofu apply -auto-approve -var-file="prod.tfvars"
