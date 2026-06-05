@@ -99,7 +99,6 @@ jobs:
           cache: true
 
       - name: OT Init
-        shell: bash
         run: tofu init
 
       - name: OT Apply changes
