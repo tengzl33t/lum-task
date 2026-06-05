@@ -27,3 +27,12 @@ module "cloudwatch" {
   source                           = "./modules/cloudwatch"
   healthcheck_lambda_function_name = module.lambda.healthcheck_lambda_function_name
 }
+
+terraform {
+  backend "s3" {
+    bucket       = "4av1s9fudz9dtvzgt765-tofu-state"
+    encrypt      = true
+    use_lockfile = true
+  }
+}
+
