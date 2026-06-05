@@ -2,6 +2,8 @@ import json
 import logging
 import os
 import uuid
+from json import JSONDecodeError
+
 import boto3
 from datetime import datetime, timezone
 
@@ -33,7 +35,19 @@ def lambda_handler(event, context):
         "path_params": event.get("pathParameters") or {},
     }
 
-    body = json.loads(event.get("body") or {}) if method == "POST" else {}
+    body = {}
+
+    if method == "POST":
+        try:
+            body = json.loads(event.get("body") or "")
+        except JSONDecodeError:
+            return {
+                "statusCode": 400,
+                "body": json.dumps({
+                    "error": "Bad Request",
+                    "message": "Incorrect request body."
+                })
+            }
 
     if body:
         item["body"] = body
