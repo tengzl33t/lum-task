@@ -12,6 +12,21 @@ resource "aws_apigatewayv2_stage" "healthcheck_apigw" {
     throttling_rate_limit  = 5
     throttling_burst_limit = 10
   }
+
+  access_log_settings {
+    destination_arn = var.healthcheck_apigw_log_group_arn
+
+    format = jsonencode({
+      requestId      = "$context.requestId"
+      sourceIp       = "$context.identity.sourceIp"
+      requestTime    = "$context.requestTime"
+      httpMethod     = "$context.httpMethod"
+      routeKey       = "$context.routeKey"
+      status         = "$context.status"
+      protocol       = "$context.protocol"
+      responseLength = "$context.responseLength"
+    })
+  }
 }
 
 resource "aws_apigatewayv2_integration" "healthcheck_apigw" {
