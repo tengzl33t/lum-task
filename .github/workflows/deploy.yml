@@ -73,23 +73,21 @@ jobs:
         with:
           cache: true
 
-      - name: OT Init
-        run: tofu init -backend-config="key=prod/terraform.tfstate"
-        env:
-          AWS_REGION: ${{ vars.AWS_REGION }}
-
-      - name: OT fmt
-        run: tofu fmt -check
-
-      - name: OT Validate
-        run: tofu validate -no-color
-
       - uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           mask-aws-account-id: true
           retry-max-attempts: 5
+
+      - name: OT Init
+        run: tofu init -backend-config="key=prod/terraform.tfstate"
+
+      - name: OT fmt
+        run: tofu fmt -check
+
+      - name: OT Validate
+        run: tofu validate -no-color
 
       - name: OT Plan
         run: tofu plan -no-color -var-file="prod.tfvars"
@@ -104,6 +102,11 @@ jobs:
       - name: Repo checkout
         uses: actions/checkout@v6
 
+      - name: Prepare OpenTofu
+        uses: opentofu/setup-opentofu@v2
+        with:
+          cache: true
+
       - uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-region: ${{ vars.AWS_REGION }}
@@ -111,15 +114,8 @@ jobs:
           mask-aws-account-id: true
           retry-max-attempts: 5
 
-      - name: Prepare OpenTofu
-        uses: opentofu/setup-opentofu@v2
-        with:
-          cache: true
-
       - name: OT Init
         run: tofu init -backend-config="key=prod/terraform.tfstate"
-        env:
-          AWS_REGION: ${{ vars.AWS_REGION }}
 
       - name: OT Apply changes
         run: tofu apply -auto-approve -var-file="prod.tfvars"
