@@ -2,6 +2,7 @@ module "api_gateway" {
   source                        = "./modules/api_gateway"
   healthcheck_lambda_invoke_arn = module.lambda.healthcheck_lambda_invoke_arn
   environment                   = var.environment
+  healthcheck_apigw_log_group_arn = module.cloudwatch.healthcheck_apigw_log_group_arn
 }
 
 module "dynamodb" {
