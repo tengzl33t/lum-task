@@ -105,8 +105,19 @@
       ],
       "Resource": [
         "arn:aws:logs:*:*:log-group:/aws/lambda/*healthcheck*",
-        "arn:aws:logs:*:*:log-group:/aws/apigateway/*healthcheck-apigw"
+        "arn:aws:logs:*:*:log-group:/aws/apigw/*healthcheck*"
       ]
+    },
+    {
+      "Sid": "CloudWatchLogDeliveryAccess",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogDelivery",
+        "logs:PutResourcePolicy",
+        "logs:DescribeResourcePolicies",
+        "logs:DeleteResourcePolicy"
+      ],
+      "Resource": "*"
     },
     {
       "Sid": "S3ListBucketAccess",
@@ -123,6 +134,26 @@
         "s3:DeleteObject"
       ],
       "Resource": "arn:aws:s3:::4av1s9fudz9dtvzgt765-tofu-state/*"
+    },
+    {
+      "Sid": "KMSAccess",
+      "Effect": "Allow",
+      "Action": [
+        "kms:CreateKey",
+        "kms:DescribeKey",
+        "kms:EnableKeyRotation",
+        "kms:ScheduleKeyDeletion",
+        "kms:CancelKeyDeletion",
+        "kms:GetKeyRotationStatus",
+        "kms:GetKeyPolicy",
+        "kms:ListResourceTags",
+        "kms:CreateGrant",
+        "kms:CreateAlias",
+        "kms:ListAliases",
+        "kms:DeleteAlias",
+        "kms:PutKeyPolicy"
+      ],
+      "Resource": "*"
     }
   ]
 }
