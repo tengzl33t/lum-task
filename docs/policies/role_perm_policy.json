@@ -195,7 +195,9 @@
         "ec2:ModifyVpcEndpoint",
         "ec2:DescribeVpcEndpoints",
         "ec2:DescribeVpcEndpointServices",
-        "ec2:DescribePrefixLists"
+        "ec2:DescribePrefixLists",
+        "ec2:DisassociateRouteTable",
+        "ec2:DetachInternetGateway"
       ],
       "Resource": "*"
     }
