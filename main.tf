@@ -1,13 +1,21 @@
+data "aws_caller_identity" "identity" {}
+data "aws_region" "region" {}
+
+locals {
+  account_id = data.aws_caller_identity.identity.account_id
+  region     = data.aws_region.region.region
+}
+
 module "api_gateway" {
-  source                        = "./modules/api_gateway"
-  healthcheck_lambda_invoke_arn = module.lambda.healthcheck_lambda_invoke_arn
-  environment                   = var.environment
+  source                          = "./modules/api_gateway"
+  healthcheck_lambda_invoke_arn   = module.lambda.healthcheck_lambda_invoke_arn
+  environment                     = var.environment
   healthcheck_apigw_log_group_arn = module.cloudwatch.healthcheck_apigw_log_group_arn
 }
 
 module "dynamodb" {
-  source      = "./modules/dynamodb"
-  environment = var.environment
+  source                  = "./modules/dynamodb"
+  environment             = var.environment
   requests_db_kms_key_arn = module.kms.requests_db_kms_key_arn
 }
 
@@ -28,12 +36,15 @@ module "lambda" {
 module "cloudwatch" {
   source                           = "./modules/cloudwatch"
   healthcheck_lambda_function_name = module.lambda.healthcheck_lambda_function_name
-  healthcheck_cw_arn = module.kms.healthcheck_cw_arn
+  healthcheck_cw_arn               = module.kms.healthcheck_cw_arn
 }
 
 module "kms" {
-  source                           = "./modules/kms"
-  environment     = var.environment
+  source                          = "./modules/kms"
+  environment                     = var.environment
+  account_id                      = local.account_id
+  region                          = local.region
+  healthcheck_lambda_iam_role_arn = module.iam.healthcheck_lambda_iam_role_arn
 }
 
 terraform {
