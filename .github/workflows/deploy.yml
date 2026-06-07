@@ -75,6 +75,8 @@ jobs:
 
       - name: OT Init
         run: tofu init -backend-config="key=prod/terraform.tfstate"
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
 
       - name: OT fmt
         run: tofu fmt -check
@@ -116,6 +118,8 @@ jobs:
 
       - name: OT Init
         run: tofu init -backend-config="key=prod/terraform.tfstate"
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
 
       - name: OT Apply changes
         run: tofu apply -auto-approve -var-file="prod.tfvars"

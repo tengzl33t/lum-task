@@ -75,6 +75,8 @@ jobs:
 
       - name: OT Init
         run: tofu init -backend-config="key=staging/terraform.tfstate"
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
 
       - name: OT fmt
         run: tofu fmt -check
