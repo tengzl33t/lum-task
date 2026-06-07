@@ -73,10 +73,15 @@ jobs:
         with:
           cache: true
 
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          mask-aws-account-id: true
+          retry-max-attempts: 5
+
       - name: OT Init
         run: tofu init -backend-config="key=staging/terraform.tfstate"
-        env:
-          AWS_REGION: ${{ vars.AWS_REGION }}
 
       - name: OT fmt
         run: tofu fmt -check
@@ -84,13 +89,6 @@ jobs:
 
       - name: OT Validate
         run: tofu validate -no-color
-
-      - uses: aws-actions/configure-aws-credentials@v6
-        with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          mask-aws-account-id: true
-          retry-max-attempts: 5
 
       - name: OT Plan
         run: tofu plan -no-color -var-file="staging.tfvars"
