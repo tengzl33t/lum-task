@@ -12,4 +12,9 @@ resource "aws_dynamodb_table" "requests_db" {
     enabled = true
     recovery_period_in_days = 14
   }
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = var.requests_db_kms_key_arn
+  }
 }

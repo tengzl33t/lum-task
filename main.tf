@@ -7,6 +7,7 @@ module "api_gateway" {
 module "dynamodb" {
   source      = "./modules/dynamodb"
   environment = var.environment
+  requests_db_kms_key_arn = module.kms.requests_db_kms_key_arn
 }
 
 module "iam" {
@@ -26,6 +27,10 @@ module "lambda" {
 module "cloudwatch" {
   source                           = "./modules/cloudwatch"
   healthcheck_lambda_function_name = module.lambda.healthcheck_lambda_function_name
+}
+
+module "kms" {
+  source                           = "./modules/kms"
 }
 
 terraform {
