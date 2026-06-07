@@ -113,6 +113,8 @@
       "Effect": "Allow",
       "Action": [
         "logs:CreateLogDelivery",
+        "logs:DeleteLogDelivery",
+        "logs:ListLogDeliveries",
         "logs:PutResourcePolicy",
         "logs:DescribeResourcePolicies",
         "logs:DeleteResourcePolicy"
