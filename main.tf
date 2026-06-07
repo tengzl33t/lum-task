@@ -28,10 +28,12 @@ module "lambda" {
 module "cloudwatch" {
   source                           = "./modules/cloudwatch"
   healthcheck_lambda_function_name = module.lambda.healthcheck_lambda_function_name
+  healthcheck_cw_arn = module.kms.healthcheck_cw_arn
 }
 
 module "kms" {
   source                           = "./modules/kms"
+  environment     = var.environment
 }
 
 terraform {
