@@ -23,6 +23,11 @@ resource "aws_lambda_function" "healthcheck_lambda" {
       LOG_LEVEL   = var.log_level
     }
   }
+
+  vpc_config {
+    subnet_ids         = [var.healthcheck_subnet_id]
+    security_group_ids = [var.healthcheck_sg_id]
+  }
 }
 
 resource "aws_lambda_permission" "apigw" {
