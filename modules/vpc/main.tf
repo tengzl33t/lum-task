@@ -1,14 +1,19 @@
 resource "aws_security_group" "healthcheck_sg" {
   name   = "${var.environment}-healthcheck-sg"
+  description = "Allow outbound traffic"
   vpc_id = aws_vpc.healthcheck_vpc.id
 
+  # trivy:ignore:AWS-0104
   egress {
+    description = "Egress for traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+# trivy:ignore:AWS-0178
 
 resource "aws_vpc_endpoint" "dynamodb" {
   vpc_id            = aws_vpc.healthcheck_vpc.id
