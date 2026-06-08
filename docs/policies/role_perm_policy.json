@@ -103,10 +103,7 @@
         "logs:DeleteRetentionPolicy",
         "logs:ListTagsForResource"
       ],
-      "Resource": [
-        "arn:aws:logs:*:*:log-group:/aws/lambda/*healthcheck*",
-        "arn:aws:logs:*:*:log-group:/aws/apigw/*healthcheck*"
-      ]
+      "Resource": "arn:aws:logs:*:*:log-group:*healthcheck*"
     },
     {
       "Sid": "CloudWatchLogDeliveryAccess",
