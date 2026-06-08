@@ -1,17 +1,17 @@
 resource "aws_cloudwatch_log_group" "healthcheck_lambda_log_group" {
-  name              = "/aws/lambda/${var.healthcheck_lambda_function_name}"
+  name              = "${var.healthcheck_lambda_function_name}-lambda-log-group"
   retention_in_days = 14
   kms_key_id = var.healthcheck_cw_arn
 }
 
 resource "aws_cloudwatch_log_group" "healthcheck_apigw_log_group" {
-  name              = "/aws/apigw/${var.healthcheck_lambda_function_name}"
+  name              = "${var.healthcheck_lambda_function_name}-apigw-log-group"
   retention_in_days = 14
   kms_key_id = var.healthcheck_cw_arn
 }
 
 resource "aws_cloudwatch_log_resource_policy" "apigw" {
-  policy_name = "${var.healthcheck_lambda_function_name}-apigw-access"
+  policy_name = "${var.healthcheck_lambda_function_name}-apigw-cw-policy"
 
   policy_document = jsonencode({
     Version = "2012-10-17"

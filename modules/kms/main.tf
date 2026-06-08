@@ -65,6 +65,6 @@ resource "aws_kms_key" "healthcheck_cw" {
 }
 
 resource "aws_kms_alias" "healthcheck_cw" {
-  name          = "alias/${var.environment}-healthcheck-cw"
+  name          = "alias/${var.environment}-healthcheck-cw-alias"
   target_key_id = aws_kms_key.healthcheck_cw.key_id
 }
