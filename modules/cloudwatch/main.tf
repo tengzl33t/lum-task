@@ -10,7 +10,7 @@ resource "aws_cloudwatch_log_group" "healthcheck_apigw_log_group" {
   kms_key_id = var.healthcheck_cw_arn
 }
 
-resource "aws_cloudwatch_log_resource_policy" "apigw" {
+resource "aws_cloudwatch_log_resource_policy" "apigw_cw_policy" {
   policy_name = "${var.healthcheck_lambda_function_name}-apigw-cw-policy"
 
   policy_document = jsonencode({
