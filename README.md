@@ -17,7 +17,7 @@ no issues.
   complexity of the project.
 - Ruff is used for Python to validate Lambda code quality and style.
 - Some IAM rules use wildcard resources where ARNs are unsupported or unknown until after resource creation. These
-  should be reviewed and scoped to specific resources before deploying to a real production environment.
+  should be reviewed and scoped to specific resources before deploying to a real production environment, if possible.
 
 ### Client traffic flow
 
