@@ -7,7 +7,7 @@ data "aws_availability_zones" "azs" {
 locals {
   account_id = data.aws_caller_identity.identity.account_id
   region     = data.aws_region.region.region
-  az_names = data.aws_availability_zones.azs.names
+  az_names   = data.aws_availability_zones.azs.names
 }
 
 module "api_gateway" {
@@ -35,8 +35,8 @@ module "lambda" {
   environment                     = var.environment
   log_level                       = var.log_level
   healthcheck_apigw_exec_arn      = module.api_gateway.healthcheck_apigw_exec_arn
-  healthcheck_subnet_id = module.vpc.healthcheck_subnet_id
-  healthcheck_sg_id = module.vpc.healthcheck_sg_id
+  healthcheck_subnet_id           = module.vpc.healthcheck_subnet_id
+  healthcheck_sg_id               = module.vpc.healthcheck_sg_id
 }
 
 module "cloudwatch" {
@@ -54,10 +54,10 @@ module "kms" {
 }
 
 module "vpc" {
-  source                           = "./modules/vpc"
-  az_names = local.az_names
+  source      = "./modules/vpc"
+  az_names    = local.az_names
   environment = var.environment
-  region = local.region
+  region      = local.region
 }
 
 terraform {
