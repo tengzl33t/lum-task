@@ -8,6 +8,8 @@ no issues.
 
 ## Architecture & Tech Stack
 
+### Decisions
+
 - OpenTofu has been used instead of Terraform as it is fully compatible and licensed under proper open source license.
 - S3 bucket is used to allow tfstate syncing between local and GitHub runs.
 - Trivy is used for security checks as it is lightweight and quick Go-based option that supports many checks including
@@ -16,6 +18,54 @@ no issues.
 - Ruff is used for Python to validate Lambda code quality and style.
 - Some IAM rules use wildcard resources where ARNs are unsupported or unknown until after resource creation. These
   should be reviewed and scoped to specific resources before deploying to a real production environment.
+
+### Client traffic flow
+
+```mermaid
+
+graph LR
+    A[Client] -->|GET /health\nPOST /health| B[API Gateway]
+    B --> C[Lambda]
+    B -->|logs| E[CloudWatch]
+    C -->|logs| E
+    C -->|via VPC endpoint| D[(DynamoDB)]
+
+    subgraph VPC
+        C
+    end
+
+```
+
+### GH Action flow
+
+```mermaid
+
+flowchart TD
+    A([Push to main]) --> B{"Changed files?"}
+    B -- " No changes " --> SKIP([Skip workflow])
+    B -- " Files changed " --> D
+
+subgraph D["Plan"]
+D1[Checkout] --> D2[Trivy scan]
+D2 --> D3[Setup Python & Ruff lint]
+D3 --> D4[Setup OpenTofu & AWS]
+D4 --> D5[tofu init → fmt → validate → plan]
+end
+
+D --> PC{"Plan succeeded?"}
+PC -- " Failed " --> PF([❌ Plan failed])
+PC -- " Succeeded " --> E
+
+subgraph E["Deployment"]
+E1[Checkout] --> E2[Setup OpenTofu & AWS]
+E2 --> E3[tofu init → apply]
+end
+
+E --> DC{"Deployment succeeded?"}
+DC -- " Failed" --> DF([❌ Deployment failed])
+DC -- " Succeeded " --> S([✅ Deployment complete])
+
+```
 
 # Usage
 
