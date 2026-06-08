@@ -39,7 +39,6 @@ graph LR
 ### GH Action flow
 
 ```mermaid
-
 flowchart TD
     A([Push to main]) --> B{"Changed files?"}
     B -- " No changes " --> SKIP([Skip workflow])
@@ -54,7 +53,10 @@ end
 
 D --> PC{"Plan succeeded?"}
 PC -- " Failed " --> PF([❌ Plan failed])
-PC -- " Succeeded " --> E
+PC -- " Succeeded " --> APPROVAL[/"⏳ Awaiting manual approval"/]
+
+APPROVAL -- " Rejected " --> AR([❌ Deployment rejected])
+APPROVAL -- " Approved " --> E
 
 subgraph E["Deployment"]
 E1[Checkout] --> E2[Setup OpenTofu & AWS]
@@ -64,7 +66,6 @@ end
 E --> DC{"Deployment succeeded?"}
 DC -- " Failed" --> DF([❌ Deployment failed])
 DC -- " Succeeded " --> S([✅ Deployment complete])
-
 ```
 
 # Usage
