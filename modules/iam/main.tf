@@ -19,8 +19,13 @@ resource "aws_iam_role_policy_attachment" "healthcheck_lambda_iam_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "healthcheck_lambda_vpc_policy" {
+  role       = aws_iam_role.healthcheck_lambda_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
 resource "aws_iam_role_policy" "healthcheck_lambda_iam_db_write_policy" {
-  name = "${var.environment}-healthcheck-lambda-custom-policy"
+  name = "${var.environment}-healthcheck-lambda-db-policy"
   role = aws_iam_role.healthcheck_lambda_iam_role.id
 
   policy = jsonencode({

@@ -13,3 +13,11 @@ variable "log_level" {
 variable "healthcheck_apigw_exec_arn" {
   type = string
 }
+
+variable "healthcheck_subnet_id" {
+  type = string
+}
+
+variable "healthcheck_sg_id" {
+  type = string
+}
