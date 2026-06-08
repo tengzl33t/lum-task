@@ -114,7 +114,10 @@
         "logs:ListLogDeliveries",
         "logs:PutResourcePolicy",
         "logs:DescribeResourcePolicies",
-        "logs:DeleteResourcePolicy"
+        "logs:DeleteResourcePolicy",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
       ],
       "Resource": "*"
     },
